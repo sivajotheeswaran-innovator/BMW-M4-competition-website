@@ -7,3 +7,6 @@ desktop.ini
 *.log
 .vscode/
 .idea/
+
+# Raw video backup originals (not used by the web app)
+raw/
