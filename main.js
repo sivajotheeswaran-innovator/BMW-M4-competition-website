@@ -67,7 +67,13 @@ CHAPTERS.forEach((c, i) => {
       if (!s.isActive) return;
       document.body.classList.toggle('has-rail', !!c.rail);
       [...rail.children].forEach(b => b.classList.toggle('now', b === rb));
-      const nxt = vids[order[order.indexOf(c.id) + 1]]; if (nxt) nxt.v.preload = 'auto'; // warm up the next clip
+      const idx = order.indexOf(c.id);
+      const nxtId = order[idx + 1];
+      if (typeof toBlob === 'function') {
+        toBlob(c.id);
+        if (nxtId) toBlob(nxtId);
+      }
+      const nxt = vids[nxtId]; if (nxt) nxt.v.preload = 'auto'; // warm up the next clip
       if (stat) stat.forEach(b => { const o = { n: 0 }, d = +b.dataset.d; gsap.to(o, { n: +b.dataset.v, duration: 1.4, ease: 'power2.out', onUpdate: () => b.textContent = o.n.toFixed(d) }); });
     }
   });
@@ -94,3 +100,32 @@ const open = () => { if (done) return; done = true; document.getElementById('loa
 const tick = () => { const b = first.buffered; const r = first.duration && b.length ? b.end(b.length - 1) / first.duration : 0; pct.textContent = Math.round(Math.min(r, 1) * 100) + '%'; };
 first.addEventListener('progress', tick); first.addEventListener('loadeddata', () => { tick(); setTimeout(open, 500); });
 first.addEventListener('error', open); setTimeout(open, 8000);
+
+// Fully download clips into memory as Blobs for instant, local-speed scrubbing
+const blobbed = {};
+async function toBlob(id) {
+  const o = vids[id];
+  if (!o || blobbed[id]) return;
+  blobbed[id] = 'loading';
+  try {
+    const src = o.v.currentSrc || o.v.src;
+    const r = await fetch(src);
+    if (!r.ok) throw new Error('Fetch failed ' + r.status);
+    const b = await r.blob();
+    const blobUrl = URL.createObjectURL(b);
+    const t = o.v.currentTime;
+    o.v.src = blobUrl;
+    o.v.currentTime = t;
+    blobbed[id] = true;
+  } catch (e) {
+    blobbed[id] = false;
+  }
+}
+
+// Sequentially cache clips in scroll order once the loader opens
+setTimeout(async () => {
+  for (const id of order) {
+    if (!blobbed[id]) await toBlob(id);
+  }
+}, 1500);
+
