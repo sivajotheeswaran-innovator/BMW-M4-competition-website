@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: bmw-m4-competition
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./

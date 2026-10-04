@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>M4 Competition: a concept film</title>
+<meta name="description" content="A scroll-driven concept film of the BMW M4 Competition. Fan project, not affiliated with BMW.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loader" role="status" aria-live="polite">
+  <div class="lamps"><i></i><i></i></div>
+  <p id="pct">0%</p>
+</div>
+<div id="mbar"><i></i><i></i><i></i></div>
+<div id="stage" aria-hidden="true"></div>
+<nav id="rail" aria-label="Teardown parts"></nav>
+<main id="chapters"></main>
+<noscript><p style="padding:2rem">This concept film needs JavaScript to play.</p></noscript>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="chapters.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
